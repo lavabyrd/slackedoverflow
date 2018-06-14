@@ -9,10 +9,12 @@ import json_format
 # Addition of the tokens required. User_token may not be
 # needed here unless we want to kick a user from the channel
 VERIFICATION_TOKEN = os.environ.get("SO_VERIFICATION_TOKEN")
+
 BOT_TOKEN = os.environ.get("SO_TOKEN")
 # I may not need a user token here. The scope should be ok
 USER_TOKEN = os.environ.get("SO_USER_TOKEN")
 
+veri = "Np65upwbjYikrfb5HpiV7305"
 # Creation of the Flask app
 app = Flask(__name__)
 
@@ -31,21 +33,31 @@ def index():
 # Endpoint for the slash command
 
 
-@app.route("/slack_overflow", methods=["POST"])
+def thread_info(channel_id, ts):
+    payload = sc.api_call('conversations.replies',
+                          channel=channel_id, ts=ts)
+    print(json_format.pretty_json(payload))
+
+
+@app.route("/actions", methods=["POST"])
 def actions():
     """
     action endpoint, receiving payloads when user clicks the action
     grabbing the relevant values and parsing the reactions
     """
     payload = json.loads(request.form.get("payload"))
-    print(json_format.pretty_json(payload))
-
-    if payload["token"] == VERIFICATION_TOKEN:
-        if payload["callback_id"] == "slack_overflow":
+    # print(json_format.pretty_json(payload))
+    ts = payload["message"]["ts"]
+    channel_id = payload["channel"]["id"]
+    user_id = payload["user"]["id"]
+    thread_info(channel_id, ts)
+    # this will be swapped to use the env variable
+    if payload["token"] == veri:
+        if payload["callback_id"] == "threadDis":
             ts = payload["message"]["ts"]
             channel_id = payload["channel"]["id"]
             user_id = payload["user"]["id"]
-            print("Got it!")
+            thread_info(channel_id, ts)
         return make_response("OK", 200)
     else:
         return make_response("wrong token, who dis", 403)
