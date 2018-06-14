@@ -2,25 +2,20 @@ import os
 from flask import Flask, request, json, jsonify, make_response, render_template
 from slackclient import SlackClient
 
-import pymongo
-from pymongo import MongoClient
 # Allows pretty printing of json to console
 import json_format
-import glow_logic
+
 
 # Addition of the tokens required. User_token may not be
 # needed here unless we want to kick a user from the channel
-VERIFICATION_TOKEN = os.environ.get("GLOW_VERIFICATION_TOKEN")
-BOT_TOKEN = os.environ.get("GLOW_BOT_TOKEN")
-USER_TOKEN = os.environ.get("GLOW_USER_TOKEN")
-MONGODBURL = os.environ.get("MONGO_URL")
+VERIFICATION_TOKEN = os.environ.get("SO_VERIFICATION_TOKEN")
+BOT_TOKEN = os.environ.get("SO_TOKEN")
+# I may not need a user token here. The scope should be ok
+USER_TOKEN = os.environ.get("SO_USER_TOKEN")
+
 # Creation of the Flask app
 app = Flask(__name__)
 
-# mongodb://<dbuser>:<dbpassword>@ds259250.mlab.com:59250/glow_worm_staging
-client = MongoClient('ds259250.mlab.com', 59250)
-db = client['glow_worm_staging']
-db.authenticate('dbrwuser', 'Nok1a45de')
 # Global reference for the Slack Client tokens
 sc = SlackClient(BOT_TOKEN)
 sc_user = SlackClient(USER_TOKEN)
@@ -31,25 +26,38 @@ sc_user = SlackClient(USER_TOKEN)
 
 @app.route("/")
 def index():
-    collection = db['staging_messages']
-    post = {"author": "Mike",
-            "text": "My first blog post!",
-            "tags": ["mongodb", "python", "pymongo"]}
-    posts = db.staging_messages
-    post_id = posts.insert_one(post).inserted_id
-    print(f"blah here's the post id - {post_id}")
     return render_template('index.html')
 
 # Endpoint for the slash command
 
 
-@app.route("/glow", methods=["POST"])
+@app.route("/slack_overflow", methods=["POST"])
+def actions():
+    """
+    action endpoint, receiving payloads when user clicks the action
+    grabbing the relevant values and parsing the reactions
+    """
+    payload = json.loads(request.form.get("payload"))
+    print(json_format.pretty_json(payload))
+
+    if payload["token"] == VERIFICATION_TOKEN:
+        if payload["callback_id"] == "slack_overflow":
+            ts = payload["message"]["ts"]
+            channel_id = payload["channel"]["id"]
+            user_id = payload["user"]["id"]
+            print("Got it!")
+        return make_response("OK", 200)
+    else:
+        return make_response("wrong token, who dis", 403)
+
+
+@app.route("/SO", methods=["POST"])
 def glow():
     payload = request.form.to_dict()
     print(json_format.pretty_json(payload))
     channel_id = payload["channel_id"]
     user_list = sc.api_call("conversations.members", channel=channel_id)
-    glow_logic.user_iteration(user_list)
+    print(user_list)
     return make_response("starting the glow!", 200)
 
 
