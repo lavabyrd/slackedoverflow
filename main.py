@@ -2,25 +2,22 @@ import os
 from flask import Flask, request, json, jsonify, make_response, render_template
 from slackclient import SlackClient
 
+from config import Config
+
 # Allows pretty printing of json to console
 import json_format
 
-
-# Addition of the tokens required. User_token may not be
-# needed here unless we want to kick a user from the channel
-VERIFICATION_TOKEN = os.environ.get("SO_VERIFICATION_TOKEN")
-
-BOT_TOKEN = os.environ.get("SO_TOKEN")
-# I may not need a user token here. The scope should be ok
-USER_TOKEN = os.environ.get("SO_USER_TOKEN")
-
-veri = "Np65upwbjYikrfb5HpiV7305"
 # Creation of the Flask app
 app = Flask(__name__)
+app.config.from_object(Config)
+
+b_token = app.config['BOT_TOKEN']
+u_token = app.config['USER_TOKEN']
+veri = app.config['VERIFICATION_TOKEN']
 
 # Global reference for the Slack Client tokens
-sc = SlackClient(BOT_TOKEN)
-sc_user = SlackClient(USER_TOKEN)
+sc = SlackClient(b_token)
+sc_user = SlackClient(u_token)
 
 # Points to the index page and just shows an easy way to
 # determine the site is up
@@ -31,6 +28,13 @@ def index():
     return render_template('index.html')
 
 # Endpoint for the slash command
+
+
+@app.route("/ping", methods=["POST", "GET"])
+def ping_endpoint():
+    sc.api_call("chat.postMessage", channel="CB7B4J8F3",
+                text="server pinged!", as_user="true")
+    return make_response("pong", 200)
 
 
 def thread_info(channel_id, ts):
@@ -49,11 +53,12 @@ def actions():
     # print(json_format.pretty_json(payload))
     ts = payload["message"]["ts"]
     channel_id = payload["channel"]["id"]
-    user_id = payload["user"]["id"]
     thread_info(channel_id, ts)
     # this will be swapped to use the env variable
     if payload["token"] == veri:
+        print("payload token ok")
         if payload["callback_id"] == "threadDis":
+            print("payload callback ok")
             ts = payload["message"]["ts"]
             channel_id = payload["channel"]["id"]
             user_id = payload["user"]["id"]
@@ -61,16 +66,6 @@ def actions():
         return make_response("OK", 200)
     else:
         return make_response("wrong token, who dis", 403)
-
-
-@app.route("/SO", methods=["POST"])
-def glow():
-    payload = request.form.to_dict()
-    print(json_format.pretty_json(payload))
-    channel_id = payload["channel_id"]
-    user_list = sc.api_call("conversations.members", channel=channel_id)
-    print(user_list)
-    return make_response("starting the glow!", 200)
 
 
 if __name__ == "__main__":
