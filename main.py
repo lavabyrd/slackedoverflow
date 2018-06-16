@@ -90,7 +90,7 @@ def post_install():
         client_secret=client_secret,
         code=auth_code
     )
-    os.environ["SLACK_USER_TOKEN"] = auth_response['access_token']
+    os.environ["SO_USER_TOKEN"] = auth_response['access_token']
     return "Authed!"
 
 
