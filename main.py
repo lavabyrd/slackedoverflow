@@ -17,6 +17,7 @@ b_token = app.config['BOT_TOKEN']
 u_token = app.config['USER_TOKEN']
 veri = app.config['VERIFICATION_TOKEN']
 
+
 # Global reference for the Slack Client tokens
 sc = SlackClient(b_token)
 sc_user = SlackClient(u_token)
@@ -29,13 +30,18 @@ sc_user = SlackClient(u_token)
 def index():
     return render_template('index.html')
 
+# this returns to both the browser and also to slack
+
 
 @app.route("/ping", methods=["POST", "GET"])
 def ping_endpoint():
-    sc.api_call("chat.postMessage", channel="CB7B4J8F3",
-                text="server pinged!", as_user="true")
+    source_channel = json.dumps(request.form['channel_id'])
+    sc.api_call("chat.postMessage", channel=source_channel,
+                text="pong!", as_user="true")
     return make_response("pong", 200)
 
+
+# this can be moved into its own file later
 
 def thread_info(channel_id, ts):
     payload = sc.api_call('conversations.replies',
