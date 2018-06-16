@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, json, jsonify, make_response, render_template
 from slackclient import SlackClient
 
+from actions_logic import *
+
 from config import Config
 
 # Allows pretty printing of json to console
@@ -27,8 +29,6 @@ sc_user = SlackClient(u_token)
 def index():
     return render_template('index.html')
 
-# Endpoint for the slash command
-
 
 @app.route("/ping", methods=["POST", "GET"])
 def ping_endpoint():
@@ -45,27 +45,8 @@ def thread_info(channel_id, ts):
 
 @app.route("/actions", methods=["POST"])
 def actions():
-    """
-    action endpoint, receiving payloads when user clicks the action
-    grabbing the relevant values and parsing the reactions
-    """
     payload = json.loads(request.form.get("payload"))
-    # print(json_format.pretty_json(payload))
-    ts = payload["message"]["ts"]
-    channel_id = payload["channel"]["id"]
-    thread_info(channel_id, ts)
-    # this will be swapped to use the env variable
-    if payload["token"] == veri:
-        print("payload token ok")
-        if payload["callback_id"] == "threadDis":
-            print("payload callback ok")
-            ts = payload["message"]["ts"]
-            channel_id = payload["channel"]["id"]
-            user_id = payload["user"]["id"]
-            thread_info(channel_id, ts)
-        return make_response("OK", 200)
-    else:
-        return make_response("wrong token, who dis", 403)
+    action_calling(payload)
 
 
 if __name__ == "__main__":
