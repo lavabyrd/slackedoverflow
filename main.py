@@ -91,6 +91,7 @@ def post_install():
         code=auth_code
     )
     os.environ["SO_USER_TOKEN"] = auth_response['access_token']
+    print(f"the team_id is {auth_response['team_id']}")
     return "Authed!"
 
 
