@@ -92,7 +92,7 @@ def post_install():
     )
     os.environ["SO_USER_TOKEN"] = auth_response['access_token']
     print(f"the team_id is {auth_response['team_id']}")
-    return "Authed!"
+    return f"Authed and installed to your team - {auth_response['team_name']}"
 
 
 if __name__ == "__main__":
