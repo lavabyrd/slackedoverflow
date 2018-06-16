@@ -16,3 +16,8 @@ class Config(object):
         "SO_VERIFICATION_TOKEN") or local_config.veri
     BOT_TOKEN = os.environ.get("SO_TOKEN") or local_config.bot_token
     USER_TOKEN = os.environ.get("SO_USER_TOKEN") or local_config.user_token
+    OAUTH_SCOPE = os.environ.get("SCOPES") or local_config.scopes
+    CLIENT_ID = os.environ.get("CLIENT_ID") or local_config.client_id
+    CLIENT_SECRET = os.environ.get(
+        "CLIENT_SECRET") or local_config.client_secret
+    USER_TOKEN = os.environ.get("USER_TOKEN") or local_config.user_token
