@@ -33,12 +33,15 @@ def index():
 # this returns to both the browser and also to slack
 
 
-@app.route("/ping", methods=["POST", "GET"])
-def ping_endpoint():
-    source_channel = json.dumps(request.form['channel_id'])
-    sc.api_call("chat.postMessage", channel=source_channel,
-                text="pong!", as_user="true")
-    return make_response("pong", 200)
+@app.route("/ping", methods=["GET", "POST"])
+def ping_slackside_endpoint():
+    if request.method == "POST":
+        source_channel = json.dumps(request.form['channel_id'])
+        sc.api_call("chat.postMessage", channel=source_channel,
+                    text="pong!", as_user="true")
+        return make_response("pong", 200)
+    else:
+        return "pong"
 
 
 # this can be moved into its own file later
