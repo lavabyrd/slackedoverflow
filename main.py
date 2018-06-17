@@ -38,7 +38,9 @@ def index():
 def ping_slackside_endpoint():
     if request.method == "POST":
         misc_func.ping()
-        return make_response("pong", 200)
+        return make_response("pong",
+                             200
+                             )
     else:
         return "pong"
 
@@ -67,14 +69,10 @@ def actions():
 def pre_install():
 
     # This shall be split out to a template shortly
-    return f'''
-      <a href="https://slack.com/oauth/authorize?scope={oauth_scope}&client_id={client_id}">
-          <img alt="Add to Slack" height="40" width="139" src="
-          https://platform.slack-edge.com/img/add_to_slack.png"
-          srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x,
-          https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
-      </a>
-     '''
+    return render_template("install_so.html",
+                           oauth_scope=oauth_scope,
+                           client_id=client_id
+                           )
 
 
 # Oauth finished endpoint
@@ -86,5 +84,7 @@ def post_install():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-
-    app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(debug=False,
+            host="0.0.0.0",
+            port=port
+            )
