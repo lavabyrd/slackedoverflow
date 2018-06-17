@@ -80,7 +80,7 @@ def pre_install():
 # Oauth finished endpoint
 @app.route("/oauth_completed", methods=["GET", "POST"])
 def post_install():
-    Oauth_logic.oauth_access()
+    auth_response = Oauth_logic.oauth_access()
     return f"Authed and installed to your team - {auth_response['team_name']}"
 
 
