@@ -73,7 +73,7 @@ def pre_install():
           srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x,
           https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
       </a>
-  '''
+     '''
 
 
 # Oauth finished endpoint
