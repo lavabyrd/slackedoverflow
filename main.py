@@ -4,6 +4,7 @@ from slackclient import SlackClient
 
 import actions_logic
 import misc_func
+import Oauth_logic
 from config import Config
 
 # Allows pretty printing of json to console
@@ -79,19 +80,7 @@ def pre_install():
 # Oauth finished endpoint
 @app.route("/oauth_completed", methods=["GET", "POST"])
 def post_install():
-
-    # Retrieve the authentication code from the request
-    auth_code = request.args['code']
-
-    # Request the authentication tokens from Slack
-    auth_response = sc.api_call(
-        "oauth.access",
-        client_id=client_id,
-        client_secret=client_secret,
-        code=auth_code
-    )
-    os.environ["SO_USER_TOKEN"] = auth_response['access_token']
-    print(f"the team_id is {auth_response['team_id']}")
+    Oauth_logic.oauth_access()
     return f"Authed and installed to your team - {auth_response['team_name']}"
 
 
