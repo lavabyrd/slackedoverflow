@@ -1,10 +1,8 @@
 import os
-try:
-    import local_config
-except:
-    pass
+from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config(object):
@@ -13,11 +11,11 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     VERIFICATION_TOKEN = os.environ.get(
-        "SO_VERIFICATION_TOKEN") or local_config.veri
-    BOT_TOKEN = os.environ.get("SO_TOKEN") or local_config.bot_token
-    USER_TOKEN = os.environ.get("SO_USER_TOKEN") or local_config.user_token
-    OAUTH_SCOPE = os.environ.get("SCOPES") or local_config.scopes
-    CLIENT_ID = os.environ.get("CLIENT_ID") or local_config.client_id
+        "SO_VERIFICATION_TOKEN")
+    BOT_TOKEN = os.environ.get("SO_TOKEN")
+    USER_TOKEN = os.environ.get("SO_USER_TOKEN")
+    OAUTH_SCOPE = os.environ.get("SCOPES")
+    CLIENT_ID = os.environ.get("CLIENT_ID")
     CLIENT_SECRET = os.environ.get(
-        "CLIENT_SECRET") or local_config.client_secret
-    USER_TOKEN = os.environ.get("SO_USER_TOKEN") or local_config.user_token
+        "CLIENT_SECRET")
+    USER_TOKEN = os.environ.get("SO_USER_TOKEN")
