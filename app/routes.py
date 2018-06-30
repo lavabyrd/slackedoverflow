@@ -1,18 +1,19 @@
 import os
+from app import app, db
 from flask import Flask, request, json, jsonify, make_response, render_template
 from slackclient import SlackClient
 
-import actions_logic
-import misc_func
-import Oauth_logic
-from config import Config
+import app.actions_logic
+import app.misc_func
+import app.Oauth_logic
+# from config import Config
 
 # Allows pretty printing of json to console
-import json_format
+import app.json_format
 
 # Creation of the Flask app
-app = Flask(__name__)
-app.config.from_object(Config)
+# app = Flask(__name__)
+# app.config.from_object(Config)
 
 b_token = app.config['BOT_TOKEN']
 u_token = app.config['USER_TOKEN']
@@ -82,9 +83,5 @@ def post_install():
     return f"Authed and installed to your team - {auth_response['team_name']}"
 
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False,
-            host="0.0.0.0",
-            port=port
-            )
+# if __name__ == "__main__":
+#     port = int(os.environ.get("PORT", 5000))

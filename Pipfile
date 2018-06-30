@@ -8,6 +8,8 @@ slackclient = "*"
 flask = "*"
 pymongo = "*"
 python-dotenv = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [dev-packages]
 
