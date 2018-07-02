@@ -7,7 +7,6 @@ import os
 # def make_shell_context():
 #     return {'db': db, 'User': User, 'Post': Post}
 
-
 # App startup
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
