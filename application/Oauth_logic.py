@@ -1,4 +1,4 @@
-import app.routes
+import application.routes
 import os
 from flask import request
 
@@ -8,10 +8,10 @@ def oauth_access():
     auth_code = request.args['code']
 
     # Request the authentication tokens from Slack
-    auth_response = app.routes.sc.api_call(
+    auth_response = application.routes.sc.api_call(
         "oauth.access",
-        client_id=app.routes.client_id,
-        client_secret=app.routes.client_secret,
+        client_id=application.routes.client_id,
+        client_secret=application.routes.client_secret,
         code=auth_code
     )
     os.environ["SO_USER_TOKEN"] = auth_response['access_token']

@@ -1,12 +1,12 @@
-import app.routes
-import app.json_format
+import application.routes
+import application.json_format
 from flask import json, request, make_response
 
 
 def thread_info(channel_id, ts):
-    payload = app.routes.sc.api_call('conversations.replies',
-                                     channel=channel_id, ts=ts)
-    print(json_format.pretty_json(payload))
+    payload = application.routes.sc.api_call('conversations.replies',
+                                             channel=channel_id, ts=ts)
+    print(application.json_format.pretty_json(payload))
 
 
 def ping():
