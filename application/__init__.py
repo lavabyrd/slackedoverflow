@@ -10,6 +10,8 @@ import os
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
+
+# when I start the db work, I can use this start the migration
 # migrate = Migrate(app, db)
 
 
