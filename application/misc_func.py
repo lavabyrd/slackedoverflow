@@ -11,5 +11,5 @@ def thread_info(channel_id, ts):
 
 def ping():
     target_channel = json.dumps(request.form['channel_id'])
-    app.routes.sc.api_call("chat.postMessage", channel=target_channel,
-                           text="pong!", as_user="true")
+    application.routes.sc.api_call("chat.postMessage", channel=target_channel,
+                                   text="pong!", as_user="true")
