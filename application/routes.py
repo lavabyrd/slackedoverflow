@@ -1,5 +1,7 @@
 from application import app
-from flask import Flask, request, json, jsonify, make_response, render_template
+from flask import Flask, request, json, jsonify, make_response, render_template, url_for, redirect, flash
+from flask_login import current_user, login_user
+from application.models import User
 from slackclient import SlackClient
 
 import application.actions_logic
@@ -32,6 +34,24 @@ sc_user = SlackClient(u_token)
 @app.route("/")
 def index():
     return render_template('index.html')
+
+
+# login page for testing
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    # haven't implemented this yet...
+    # form = LoginForm()
+    # if form.validate_on_submit():
+    #     user = User.query.filter_by(username=form.username.data).first()
+    #     if user is None or not user.check_password(form.password.data):
+    #         flash('Invalid username or password')
+    #         return redirect(url_for('login'))
+    #     login_user(user, remember=form.remember_me.data)
+    #     return redirect(url_for('index'))
+    # return render_template('login.html', form=form)
+    return render_template('login.html')
 
 
 # this returns to both the browser and also to slack
