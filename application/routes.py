@@ -7,6 +7,7 @@ from slackclient import SlackClient
 import application.actions_logic
 import application.misc_func
 import application.Oauth_logic
+from application.forms import LoginForm
 
 # from config import Config
 
@@ -31,6 +32,7 @@ sc_user = SlackClient(u_token)
 
 
 # Main index page
+@app.route("/index")
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -41,17 +43,17 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    # haven't implemented this yet...
-    # form = LoginForm()
-    # if form.validate_on_submit():
-    #     user = User.query.filter_by(username=form.username.data).first()
-    #     if user is None or not user.check_password(form.password.data):
-    #         flash('Invalid username or password')
-    #         return redirect(url_for('login'))
-    #     login_user(user, remember=form.remember_me.data)
-    #     return redirect(url_for('index'))
-    # return render_template('login.html', form=form)
-    return render_template('login.html')
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for('index'))
+    return render_template('login.html', form=form)
+    # return render_template('login.html')
 
 
 # this returns to both the browser and also to slack
