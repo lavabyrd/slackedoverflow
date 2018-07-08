@@ -1,6 +1,6 @@
 from application import app
 from flask import Flask, request, json, jsonify, make_response, render_template, url_for, redirect, flash
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from application.models import User
 from slackclient import SlackClient
 
@@ -34,6 +34,7 @@ sc_user = SlackClient(u_token)
 # Main index page
 @app.route("/index")
 @app.route("/")
+@login_required
 def index():
     return render_template('index.html')
 
