@@ -12,9 +12,16 @@
 </head>
 
 <body>
-    {% include "/partials/_navbar.html" %} {% include "/partials/_header.html" %}
-
-
+    <div class="alert alert-danger" role="alert">
+        {% with messages = get_flashed_messages() %} {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %} {% endwith %}
+    </div> {% include "/partials/_navbar.html" %} {% include "/partials/_header.html" %} {% block content %} {% endblock
+    %}
     <!--js snippets -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
