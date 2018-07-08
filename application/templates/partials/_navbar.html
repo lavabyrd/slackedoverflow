@@ -1,5 +1,13 @@
 <nav class="navbar navbar-light bg-light justify-content-between">
     <a class="navbar-brand">Navbar</a>
+    <div>
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}"></a>
+        {% else %}
+        <a href="{{ url_for('logout') }}"></a>
+        {% endif %}
+    </div>
     <form class="form-inline">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
