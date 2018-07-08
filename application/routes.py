@@ -1,6 +1,6 @@
 from application import app
 from flask import Flask, request, json, jsonify, make_response, render_template, url_for, redirect, flash
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 from application.models import User
 from slackclient import SlackClient
 
@@ -38,7 +38,7 @@ def index():
     return render_template('index.html')
 
 
-# login page for testing
+# login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -53,10 +53,18 @@ def login():
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
     return render_template('login.html', form=form)
-    # return render_template('login.html')
 
+# logout page
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 # this returns to both the browser and also to slack
+
+
 @app.route("/ping", methods=["GET", "POST"])
 def ping_slackside_endpoint():
     if request.method == "POST":
