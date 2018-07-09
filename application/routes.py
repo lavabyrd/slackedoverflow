@@ -1,22 +1,35 @@
-from application import app
-from flask import Flask, request, json, jsonify, make_response, render_template, url_for, redirect, flash
-from flask_login import current_user, login_user, logout_user, login_required
+from application import app,\
+    db
+from flask import Flask,\
+    request,\
+    json,\
+    jsonify,\
+    make_response,\
+    render_template,\
+    url_for,\
+    redirect,\
+    flash
+
+
+from flask_login import current_user,\
+    login_user,\
+    logout_user,\
+    login_required
+
+
+from werkzeug.urls import url_parse
+
 from application.models import User
 from slackclient import SlackClient
 
 import application.actions_logic
 import application.misc_func
 import application.Oauth_logic
-from application.forms import LoginForm
-
-# from config import Config
-
+from application.forms import LoginForm,\
+    RegistrationForm
 # Allows pretty printing of json to console
 import application.json_format
 import os
-# Creation of the Flask app
-# app = Flask(__name__)
-# app.config.from_object(Config)
 
 b_token = app.config['BOT_TOKEN']
 u_token = app.config['USER_TOKEN']
@@ -36,7 +49,20 @@ sc_user = SlackClient(u_token)
 @app.route("/")
 @login_required
 def index():
-    return render_template('index.html')
+
+    # this is just here to demo
+
+    posts = [
+        {
+            'author': {'username': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'username': 'Susan'},
+            'body': 'The Avengers movie was so cool!'
+        }
+    ]
+    return render_template('index.html', posts=posts)
 
 
 # login page
@@ -52,7 +78,10 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
     return render_template('login.html', form=form)
 
 # logout page
@@ -64,6 +93,21 @@ def logout():
     return redirect(url_for('index'))
 
 # this returns to both the browser and also to slack
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations! you are now registered!')
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form)
 
 
 @app.route("/ping", methods=["GET", "POST"])
