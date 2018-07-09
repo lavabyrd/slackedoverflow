@@ -1,6 +1,8 @@
 import application.routes
 import application.json_format
-from flask import json, request, make_response
+from flask import json,\
+    request,\
+    make_response
 
 
 def thread_info(channel_id, ts):
