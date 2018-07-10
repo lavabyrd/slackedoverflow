@@ -36,3 +36,11 @@ class Post(db.Model):
 
     def __repr__(self):
         return f'Post {self.title}'
+
+
+class Token(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.String(30))
+    user_id = db.Column(db.String(30))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    token = db.Column(db.String(120))
