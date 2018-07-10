@@ -1,6 +1,6 @@
 import os
 
-
+# application import statements
 from application import (
     app,
     db
