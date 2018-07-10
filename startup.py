@@ -1,8 +1,12 @@
-from application import app,\
+from application import (
+    app,
     db
+)
 import os
-from application.models import User,\
-    Post
+from application.models import (
+    Post,
+    User
+)
 
 
 @app.shell_context_processor

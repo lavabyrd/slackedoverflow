@@ -1,5 +1,6 @@
-import application.routes
 from flask import make_response
+
+import application.routes
 import application.misc_func
 
 
