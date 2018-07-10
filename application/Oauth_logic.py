@@ -1,5 +1,5 @@
+import application.routes
 import os
-from application import routes
 from flask import request
 
 
