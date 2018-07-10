@@ -1,3 +1,6 @@
+import os
+
+
 from application import (
     app,
     db
@@ -26,18 +29,20 @@ from flask_login import (
 from werkzeug.urls import url_parse
 
 from application.models import User
+from application import (
+    actions_logic,
+    json_format,
+    misc_func,
+    Oauth_logic
+)
 from slackclient import SlackClient
 
-import application.actions_logic
-import application.misc_func
-import application.Oauth_logic
 from application.forms import (
     LoginForm,
     RegistrationForm
 )
 # Allows pretty printing of json to console
-import application.json_format
-import os
+
 
 b_token = app.config['BOT_TOKEN']
 u_token = app.config['USER_TOKEN']
@@ -121,7 +126,7 @@ def register():
 @app.route("/ping", methods=["GET", "POST"])
 def ping_slackside_endpoint():
     if request.method == "POST":
-        application.misc_func.ping()
+        misc_func.ping()
         return make_response("pong",
                              200
                              )
@@ -140,12 +145,12 @@ def actions():
             ts = payload["message"]["ts"]
             channel_id = payload["channel"]["id"]
             user_id = payload["user"]["id"]
-            application.misc_func.thread_info(channel_id, ts)
+            misc_func.thread_info(channel_id, ts)
             return make_response("OK", 200)
         else:
             return make_response("wrong token, who dis", 403)
 
-    application.actions_logic.action_calling(payload)
+    actions_logic.action_calling(payload)
 
 
 # Oauth install endpoint
@@ -162,9 +167,5 @@ def pre_install():
 # Oauth finished endpoint
 @app.route("/oauth_completed", methods=["GET", "POST"])
 def post_install():
-    auth_response = application.Oauth_logic.oauth_access()
+    Oauth_logic.oauth_access()
     return f"Authed and installed to your team - {auth_response['team_name']}"
-
-
-# if __name__ == "__main__":
-#     port = int(os.environ.get("PORT", 5000))
