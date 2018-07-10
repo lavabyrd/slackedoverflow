@@ -1,20 +1,26 @@
-from application import app,\
+from application import (
+    app,
     db
-from flask import Flask,\
-    request,\
-    json,\
-    jsonify,\
-    make_response,\
-    render_template,\
-    url_for,\
-    redirect,\
-    flash
+)
+from flask import (
+    Flask,
+    flash,
+    json,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for
+)
 
 
-from flask_login import current_user,\
-    login_user,\
-    logout_user,\
-    login_required
+from flask_login import (
+    current_user,
+    login_required,
+    login_user,
+    logout_user
+)
 
 
 from werkzeug.urls import url_parse
@@ -25,8 +31,10 @@ from slackclient import SlackClient
 import application.actions_logic
 import application.misc_func
 import application.Oauth_logic
-from application.forms import LoginForm,\
+from application.forms import (
+    LoginForm,
     RegistrationForm
+)
 # Allows pretty printing of json to console
 import application.json_format
 import os
