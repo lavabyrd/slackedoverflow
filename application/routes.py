@@ -2,8 +2,15 @@ import os
 
 # application import statements
 from application import (
+    actions_logic,
     app,
-    db
+    db,
+    forms,
+    json_format,
+    misc_func,
+    models,
+    Oauth_logic
+
 )
 from flask import (
     Flask,
@@ -18,6 +25,8 @@ from flask import (
 )
 
 
+# Allows pretty printing of json to console
+
 from flask_login import (
     current_user,
     login_required,
@@ -28,18 +37,10 @@ from flask_login import (
 
 from werkzeug.urls import url_parse
 
-from application.models import User
+
 from slackclient import SlackClient
 
-import application.actions_logic
-import application.misc_func
-import application.Oauth_logic
-from application.forms import (
-    LoginForm,
-    RegistrationForm
-)
-# Allows pretty printing of json to console
-import application.json_format
+
 import os
 
 b_token = app.config['BOT_TOKEN']
@@ -82,9 +83,9 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
-    form = LoginForm()
+    form = forms.LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = models.User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
@@ -110,9 +111,9 @@ def logout():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    form = RegistrationForm()
+    form = forms.RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = models.User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -124,7 +125,7 @@ def register():
 @app.route("/ping", methods=["GET", "POST"])
 def ping_slackside_endpoint():
     if request.method == "POST":
-        application.misc_func.ping()
+        misc_func.ping()
         return make_response("pong",
                              200
                              )
@@ -143,12 +144,12 @@ def actions():
             ts = payload["message"]["ts"]
             channel_id = payload["channel"]["id"]
             user_id = payload["user"]["id"]
-            application.misc_func.thread_info(channel_id, ts)
+            misc_func.thread_info(channel_id, ts)
             return make_response("OK", 200)
         else:
             return make_response("wrong token, who dis", 403)
 
-    application.actions_logic.action_calling(payload)
+    actions_logic.action_calling(payload)
 
 
 # Oauth install endpoint
@@ -165,9 +166,5 @@ def pre_install():
 # Oauth finished endpoint
 @app.route("/oauth_completed", methods=["GET", "POST"])
 def post_install():
-    auth_response = application.Oauth_logic.oauth_access()
+    auth_response = Oauth_logic.oauth_access()
     return f"Authed and installed to your team - {auth_response['team_name']}"
-
-
-# if __name__ == "__main__":
-#     port = int(os.environ.get("PORT", 5000))

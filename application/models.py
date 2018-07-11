@@ -5,8 +5,10 @@ from werkzeug.security import (
 )
 
 from flask_login import UserMixin
-from application import db
-from application import login
+from application import (
+    db,
+    login
+)
 
 
 @login.user_loader
