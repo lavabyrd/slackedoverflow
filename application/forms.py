@@ -13,7 +13,7 @@ from wtforms.validators import (
 )
 
 
-from application.models import User
+from application import models
 
 
 class LoginForm(FlaskForm):
@@ -32,11 +32,11 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = models.User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('Please use a different username.')
 
     def validate_email(self, email):
-        email = User.query.filter_by(email=email.data).first()
+        email = models.User.query.filter_by(email=email.data).first()
         if email is not None:
             raise ValidationError('Please use a different email address.')

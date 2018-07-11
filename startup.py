@@ -1,17 +1,14 @@
 from application import (
     app,
-    db
+    db,
+    models
 )
 import os
-from application.models import (
-    Post,
-    User
-)
 
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'User': User, 'Post': Post}
+    return {'db': db, 'User': models.User, 'Post': models.Post}
 
 
 # App startup
