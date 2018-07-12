@@ -149,7 +149,7 @@ def actions():
         else:
             return make_response("wrong token, who dis", 403)
 
-    actions_logic.action_calling(payload)
+    # actions_logic.action_calling(payload)
 
 
 # Oauth install endpoint
