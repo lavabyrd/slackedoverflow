@@ -13,7 +13,7 @@ from flask import (
 def thread_info(channel_id, ts):
     payload = routes.sc_user.api_call('conversations.replies',
                                       channel=channel_id, ts=ts)
-    print(json_format.pretty_json(payload))
+    print(json_format.pretty_json(payload['messages']))
 
 
 def ping():
