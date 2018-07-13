@@ -133,17 +133,21 @@ def ping_slackside_endpoint():
         return "pong"
 
 
-# this needs to be fixed as currently the logic is broken
+# endpoint to be hit whenever a user action takes place in slack
 @app.route("/actions", methods=["POST"])
 def actions():
     payload = json.loads(request.form.get("payload"))
     if payload["token"] == veri:
-        print("payload token ok")
+        # debug checking of payload token
+        # print("payload token ok")
         if payload["callback_id"] == "threadDis":
-            print("payload callback ok")
+            # Uncomment to check the payload token is valid
+            # print("payload callback ok")
             ts = payload["message"]["ts"]
+            team_id = payload["team"]["id"]
+            team_domain = payload["team"]["domain"]
             channel_id = payload["channel"]["id"]
-            user_id = payload["user"]["id"]
+            # user_id = payload["user"]["id"]
             misc_func.thread_info(channel_id, ts)
             return make_response("OK", 200)
         else:
