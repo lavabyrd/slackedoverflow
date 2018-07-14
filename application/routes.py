@@ -147,8 +147,9 @@ def actions():
             team_id = payload["team"]["id"]
             team_domain = payload["team"]["domain"]
             channel_id = payload["channel"]["id"]
-            # user_id = payload["user"]["id"]
-            misc_func.thread_info(channel_id, ts)
+            user_id = payload["user"]["id"]
+            misc_func.post_write(team_id,
+                                 team_domain, user_id, channel_id, ts)
             return make_response("OK", 200)
         else:
             return make_response("wrong token, who dis", 403)
