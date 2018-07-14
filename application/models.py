@@ -40,7 +40,7 @@ class Post(db.Model):
     team_domain = db.Column(db.String(64), index=True)
     user_added = db.Column(db.String(16), index=True)
     user_posted = db.Column(db.String(16), index=True)
-    ts_posted = db.Column(db.String(16))
+    ts_posted = db.Column(db.String(32))
     channel = db.Column(db.String(16), index=True)
     replies = db.Column(db.Integer, index=True, nullable=True)
 
