@@ -45,7 +45,7 @@ class Post(db.Model):
     replies = db.Column(db.Integer, index=True, nullable=True)
 
     def __repr__(self):
-        return f'Post {self.title}'
+        return f'Post {self.team_domain}'
 
 
 class Token(db.Model):

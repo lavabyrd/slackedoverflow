@@ -24,9 +24,6 @@ from flask import (
     url_for
 )
 
-
-# Allows pretty printing of json to console
-
 from flask_login import (
     current_user,
     login_required,
@@ -63,17 +60,8 @@ sc_user = SlackClient(u_token)
 def index():
 
     # this is just here to demo
+    posts = models.Post.query.all()
 
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
     return render_template('index.html', posts=posts)
 
 
@@ -173,3 +161,11 @@ def pre_install():
 def post_install():
     auth_response = Oauth_logic.oauth_access()
     return f"Authed and installed to your team - {auth_response['team_name']}"
+
+
+@app.route("/posts_page")
+@login_required
+def posts_page():
+    posts = models.Post.query.all()
+
+    return render_template("posts.html", posts=posts)
