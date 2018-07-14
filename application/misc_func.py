@@ -31,7 +31,6 @@ def ping():
     # db.session.add(user)
     # db.session.commit()
 def post_write(team_id, team_domain, user_id, channel_id, ts):
-    print("step1")
 
     for i in thread_info(channel_id, ts):
         try:
@@ -47,5 +46,6 @@ def post_write(team_id, team_domain, user_id, channel_id, ts):
             )
             db.session.add(post)
             db.session.commit()
+            print("Item added to the Db")
         except:
             continue
