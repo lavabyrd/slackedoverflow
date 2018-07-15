@@ -9,6 +9,10 @@ from application import (
     app,
     db
 )
+from config import Config
+
+app.config.from_object(Config)
+
 
 migrate = Migrate(app, db)
 
