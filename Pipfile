@@ -13,6 +13,8 @@ flask-migrate = "*"
 flask-login = "*"
 flask-wtf = "*"
 "psycopg2" = "*"
+flask-script = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
 
