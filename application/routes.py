@@ -87,7 +87,7 @@ def login():
 # logout page
 
 
-@app.route('/logout')
+@app.route('/logout', methods=["POST"])
 def logout():
     logout_user()
     return redirect(url_for('index'))
