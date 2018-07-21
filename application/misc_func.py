@@ -10,6 +10,7 @@ from flask import (
     request
 )
 
+
 from application import models
 
 
