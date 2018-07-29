@@ -1,3 +1,8 @@
 {
+<<<<<<< HEAD
     "python.jediEnabled": false
+=======
+    "python.jediEnabled": false,
+    "python.pythonPath": "/usr/local/bin/python3"
+>>>>>>> testing
 }
