@@ -1,40 +1,55 @@
-import os
-import application
+from application import app
 import unittest
-import tempfile
 
 
-class applicationTestCase(unittest.TestCase):
+class FlaskTestCase(unittest.TestCase):
 
-    def setUp(self):
-        self.db_fd, application.app.config['DATABASE'] = tempfile.mkstemp()
-        application.app.testing = True
-        self.app = application.app.test_client()
-        with application.app.app_context():
-            return ""
+    # Ensure a redirect to the login page
 
-    def tearDown(self):
-        os.close(self.db_fd)
-        os.unlink(application.app.config['DATABASE'])
+    def test_index_redirect(self):
+        tester = app.test_client(self)
+        response = tester.get(
+            '/index',
+            content_type='html/text',
+            follow_redirects=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(b'Please log in to access this page.' in response.data)
 
-    # def test_empty_db(self):
-    #     rv = self.app.get('/')
-    #     print(rv)
-    #     assert b'No entries here so far' in rv.data
+    # Ensure a 302 on index page without a redirect follow
 
-    def test_login_logout(self):
-        rv = self.login('admin', 'default')
-        assert b'You were logged in' in rv.data
-        rv = self.logout()
-        assert b'You were logged out' in rv.data
-        rv = self.login('adminx', 'default')
-        assert b'Invalid username' in rv.data
-        rv = self.login('admin', 'defaultx')
-        assert b'Invalid password' in rv.data
+    def test_index_no_redirect(self):
+        tester = app.test_client(self)
+        response = tester.get(
+            '/index',
+            content_type='html/text',
+            follow_redirects=False,
+        )
+        self.assertEqual(response.status_code, 302)
 
+    # Ensure logoutpage returns and redirects
 
-def logout(self):
-    return self.app.get('/logout', follow_redirects=True)
+    def test_logout_redirect(self):
+        tester = app.test_client(self)
+        response = tester.get(
+            '/logout', content_type='html/text', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(b'Please login to continue' in response.data)
+
+    # Ensure a 302 on logout page without a redirect follow
+
+    def test_logout_no_redirect(self):
+        tester = app.test_client(self)
+        response = tester.get(
+            '/logout', content_type='html/text', follow_redirects=False)
+        self.assertEqual(response.status_code, 302)
+
+    # Ensure the login page loads correctly
+
+    def test_login_page_load(self):
+        tester = app.test_client(self)
+        response = tester.get('/login', content_type='html/text')
+        self.assertTrue(b'Sign In' in response.data)
 
 
 if __name__ == '__main__':

@@ -90,6 +90,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('Please login to continue')
     return redirect(url_for('login'))
 
 # this returns to both the browser and also to slack
