@@ -61,7 +61,8 @@ def index():
 
     # this is just here to demo
     posts = models.Post.query.all()
-
+    for post in posts:
+        print(post.message_text)
     return render_template('index.html', posts=posts)
 
 

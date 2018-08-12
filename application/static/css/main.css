@@ -5,3 +5,13 @@
 #body_main {
     margin: 30px;
 }
+
+#post {
+    padding: 15px, 0, 15px, 15px;
+    background-color: lightgrey;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border-style: groove;
+    color: black;
+    border-color: beige;
+}

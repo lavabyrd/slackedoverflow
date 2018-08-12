@@ -44,8 +44,8 @@ class Post(db.Model):
     channel = db.Column(db.String(16), index=True)
     replies = db.Column(db.Integer, index=True, nullable=True)
 
-    def __repr__(self):
-        return f'Post {self.team_domain}'
+    # def __repr__(self):
+    #     return f'Post {self.team_domain}'
 
 
 class Token(db.Model):

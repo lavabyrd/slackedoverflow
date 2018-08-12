@@ -1,3 +1,14 @@
 {% extends 'base.html' %} {% block content %} {% for post in posts %}
-<li>Message text: {{ post.message_text }}</li>
+<a href="https://slack.com">
+    <div class="row" id="post">
+        <div class="col">
+            <div class="col-4">
+                <strong>{{ post.team_domain }}</strong> - </div>
+            <div class="col-8">
+                {{ post.message_text }}
+            </div>
+        </div>
+    </div>
+</a>
+
 {% endfor %} {% endblock %}
