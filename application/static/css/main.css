@@ -2,10 +2,24 @@
     height: 400px;
     background-image: url(https://mdbootstrap.com/img/Photos/Others/forest2.jpg);
     background-size: cover;
+    border: -20;
+}
+
+#header_text {
+    font-size: 7vw;
 }
 
 #body_main {
     margin: 30px;
+}
+
+#body_custom {
+    background-color: #D2EEEF;
+    color: #545C52;
+}
+
+#navbar_custom {
+    background-color: #BBC7CE;
 }
 
 #post {
@@ -17,3 +31,8 @@
     color: black;
     border-color: beige;
 }
+
+/* #register_form {
+    border: 1px solid black;
+
+} */

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 
-<body>
+<body id="body_custom">
 
     <div id="body_main">
         {% include "/partials/_header.html" %} {% include "/partials/_navbar.html" %} {% with messages = get_flashed_messages() %}
