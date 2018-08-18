@@ -14,7 +14,7 @@
 <body>
 
     <div id="body_main">
-        {% include "/partials/_navbar.html" %} {% include "/partials/_header.html" %} {% with messages = get_flashed_messages() %}
+        {% include "/partials/_header.html" %} {% include "/partials/_navbar.html" %} {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
             <div class="alert alert-danger" role="alert">

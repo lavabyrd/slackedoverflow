@@ -1,5 +1,7 @@
 #header_jumbotron {
     height: 400px;
+    background-image: url(https://mdbootstrap.com/img/Photos/Others/forest2.jpg);
+    background-size: cover;
 }
 
 #body_main {

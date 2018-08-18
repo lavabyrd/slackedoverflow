@@ -1,4 +1,7 @@
 {% extends "base.html" %} {% block content %}
+<p>If you already have an account, please
+    <a href="{{ url_for('login') }}">click here to login.</a>
+</p>
 <h1>Register</h1>
 <form action="" method="post">
     {{ form.hidden_tag() }}
