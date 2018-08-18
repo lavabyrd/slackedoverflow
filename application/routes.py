@@ -84,12 +84,23 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route("/posts_page")
+@app.route("/posts_page", methods=["GET", "POST"])
 @login_required
 def posts_page():
-    posts = models.Post.query.all()
+    form = forms.SearchBar()
 
-    return render_template("posts.html", posts=posts)
+    # if current_user.is_authenticated:
+    #     return render_template("posts.html", posts=posts, form=form)
+    if form.validate_on_submit():
+        posts = models.Post.query.all()
+        posts = models.Post.query
+        posts = posts.filter(models.Post.message_text.like(
+            '%' + form.searchterm.data + '%'))
+        return render_template("post_results.html", posts=posts, form=form)
+    else:
+        posts = models.Post.query.all()
+
+        return render_template("posts.html", posts=posts, form=form)
 
 # logout page
 
