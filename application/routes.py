@@ -59,11 +59,7 @@ sc_user = SlackClient(u_token)
 @login_required
 def index():
 
-    # this is just here to demo
-    posts = models.Post.query.all()
-    for post in posts:
-        print(post.message_text)
-    return render_template('index.html', posts=posts)
+    return render_template('index.html')
 
 
 # login page
@@ -86,6 +82,14 @@ def login():
         return redirect(next_page)
 
     return render_template('login.html', form=form)
+
+
+@app.route("/posts_page")
+@login_required
+def posts_page():
+    posts = models.Post.query.all()
+
+    return render_template("posts.html", posts=posts)
 
 # logout page
 
@@ -148,12 +152,16 @@ def actions():
 
     # actions_logic.action_calling(payload)
 
+# This section and routes below looks after the oauth endpoints.
+# These are used to control
+# installing this app to Slack
+# but is only needed while installing
+# to a new team
+
 
 # Oauth install endpoint
 @app.route("/oauth_install", methods=["GET"])
 def pre_install():
-
-    # This shall be split out to a template shortly
     return render_template("install_so.html",
                            oauth_scope=oauth_scope,
                            client_id=client_id
@@ -165,11 +173,3 @@ def pre_install():
 def post_install():
     auth_response = Oauth_logic.oauth_access()
     return f"Authed and installed to your team - {auth_response['team_name']}"
-
-
-@app.route("/posts_page")
-@login_required
-def posts_page():
-    posts = models.Post.query.all()
-
-    return render_template("posts.html", posts=posts)

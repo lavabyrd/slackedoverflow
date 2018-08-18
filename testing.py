@@ -46,6 +46,11 @@ class FlaskTestCase(unittest.TestCase):
         response = tester.get('/login', content_type='html/text')
         self.assertTrue(b'Sign In' in response.data)
 
+    def test_ping_page_loads(self):
+        tester = app.test_client(self)
+        response = tester.get('/ping', content_type='html/text')
+        self.assertTrue(b'pong' in response.data)
+
     # Ensure the login page logs in correctly
     # def test_login_page_login(self):
     #     tester = app.test_client(self)
