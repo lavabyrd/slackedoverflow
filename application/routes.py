@@ -1,8 +1,8 @@
 import os
-
+import actions_logic
 # application import statements
 from application import (
-    actions_logic,
+    # actions_logic,
     app,
     db,
     forms,
@@ -21,6 +21,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    Response,
     url_for
 )
 
@@ -143,25 +144,29 @@ def ping_slackside_endpoint():
 # endpoint to be hit whenever a user action takes place in slack
 @app.route("/actions", methods=["POST"])
 def actions():
-    payload = json.loads(request.form.get("payload"))
-    if payload["token"] == veri:
-        # debug checking of payload token
-        # print("payload token ok")
-        if payload["callback_id"] == "threadDis":
-            # Uncomment to check the payload token is valid
-            # print("payload callback ok")
-            ts = payload["message"]["ts"]
-            team_id = payload["team"]["id"]
-            team_domain = payload["team"]["domain"]
-            channel_id = payload["channel"]["id"]
-            user_id = payload["user"]["id"]
-            misc_func.post_write(team_id,
-                                 team_domain, user_id, channel_id, ts)
-            return make_response("OK", 200)
-        else:
-            return make_response("wrong token, who dis", 403)
+    # payload = json.dumps(list(request.form.get("payload")))
+    # payload = json.loads(request.form.get("payload"))
+    # payload = jsonify(request.form.get("payload"))
+    # print(payload)  # datab = jsonify(payload)
+    # if payload["token"] == veri:
+    #     # debug checking of payload token
+    #     # print("payload token ok")
+    #     if payload["callback_id"] == "threadDis":
+    #         # Uncomment to check the payload token is valid
+    #         # print("payload callback ok")
+    #         ts = payload["message"]["ts"]
+    #         team_id = payload["team"]["id"]
+    #         team_domain = payload["team"]["domain"]
+    #         channel_id = payload["channel"]["id"]
+    #         user_id = payload["user"]["id"]
+    #         misc_func.post_write(team_id,
+    #                              team_domain, user_id, channel_id, ts)
+    #         return make_response("OK", 200)
+    #     else:
+    #         return make_response("wrong token, who dis", 403)
 
-    # actions_logic.action_calling(payload)
+    actions_logic.action_calling.delay(request.form.get("payload"), veri)
+    return "ok!"
 
 # This section and routes below looks after the oauth endpoints.
 # These are used to control

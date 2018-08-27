@@ -21,3 +21,7 @@ class Config(object):
     CLIENT_ID = os.environ.get("CLIENT_ID")
     CLIENT_SECRET = os.environ.get(
         "CLIENT_SECRET")
+    CELERY_BROKER_URL = os.environ.get(
+        "REDIS_URL")
+    CELERY_RESULT_BACKEND = os.environ.get(
+        "REDIS_URL")
