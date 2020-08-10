@@ -1,7 +1,7 @@
 # SlackedOverflow
 
 ## Overview
-This is a WIP for a college project
+This is a final build for a college project
 
 ## Technical Overview
 When a user presses the action button for Slacked Overflow, it will take the ts channel and user, call
